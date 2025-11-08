@@ -1,0 +1,9 @@
+Django==5.2.8
+djangorestframework==3.16.1
+numpy==2.3.4
+pandas==2.3.3
+python-dotenv==1.2.1
+scikit-learn==1.7.2
+black==25.9.0
+isort==7.0.0
+djlint==1.36.4
