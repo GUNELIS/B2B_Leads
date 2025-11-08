@@ -24,10 +24,16 @@ def normalize_budget(budget_str: str):
     if any(x in s for x in ["tbd", "unknown"]):
         return None
 
+    # handle 'k' or 'K' suffix for thousands
+    multiplier = 1
+    if re.search(r"\d+(\.\d+)?\s*k", s):
+        multiplier = 1000
+
     match = re.findall(r"[\d,.]+", s)
     if not match:
         return None
-    amount = float(match[0].replace(",", "").replace("k", "000"))
+
+    amount = float(match[0].replace(",", "")) * multiplier
 
     # currency handling
     if "€" in s or "eur" in s:
