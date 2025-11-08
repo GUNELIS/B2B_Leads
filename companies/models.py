@@ -46,6 +46,8 @@ class Company(models.Model):
             models.Index(fields=["industry"]),
             models.Index(fields=["region"]),
         ]
+        verbose_name = "Company"
+        verbose_name_plural = "Companies"
 
     def __str__(self):
         return self.name
