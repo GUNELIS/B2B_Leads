@@ -68,5 +68,3 @@ class LeadCompanyMatchAdmin(admin.ModelAdmin):
         "matched_at",
     )
     readonly_fields = ("matched_at",)
-
-    
