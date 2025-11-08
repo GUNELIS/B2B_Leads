@@ -13,8 +13,9 @@ services:
       - DEBUG=1
 
   cleaning_agent:
-    image: python:3.11-slim
+    build: ./cleaning_agent
     container_name: cleaning_agent
-    command: tail -f /dev/null  # placeholder so container runs idle
-    volumes:
-      - ./cleaning_agent:/cleaning_agent
+    ports:
+      - "8080:8080"
+    depends_on:
+      - django
