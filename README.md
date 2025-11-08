@@ -26,3 +26,11 @@ API endpoints:
 - GET /api/companies/
 
 - GET /api/leads/
+
+## Uploading fixture data to the DB
+
+In this project we have some sample data in json fixtures. To upload them to the database, do the following:
+
+```bat
+python manage.py loaddata <my-fixture-name>.json
+```

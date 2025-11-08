@@ -1,0 +1,362 @@
+[
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "MicroHard Systems",
+      "website": "https://microhard-systems.example",
+      "industry": "Retail",
+      "region": "APAC",
+      "typical_project_budget_euro": "138071.00",
+      "tech_stack": [
+        "python",
+        "django",
+        "postgres"
+      ],
+      "notes": "Scaling rapidly",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "AppLedge",
+      "website": "https://appledge.example",
+      "industry": "Adtech",
+      "region": "DACH",
+      "typical_project_budget_euro": "88923.00",
+      "tech_stack": [
+        "gcp",
+        "bigquery",
+        "tensorflow"
+      ],
+      "notes": "AI adoption phase",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "Googull Data Labs",
+      "website": "https://googull-data-labs.example",
+      "industry": "Saas",
+      "region": "North America",
+      "typical_project_budget_euro": "115501.00",
+      "tech_stack": [
+        "python",
+        "django",
+        "postgres"
+      ],
+      "notes": "Legacy CRM; budget unclear",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "FaceSpace Ltd",
+      "website": "https://facespace-ltd.example",
+      "industry": "Adtech",
+      "region": "DACH",
+      "typical_project_budget_euro": "109282.00",
+      "tech_stack": [
+        "gcp",
+        "bigquery",
+        "tensorflow"
+      ],
+      "notes": "ICP: mid-market teams",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "Netflux Studios",
+      "website": "https://netflux-studios.example",
+      "industry": "Logistics",
+      "region": "North America",
+      "typical_project_budget_euro": "101168.00",
+      "tech_stack": [
+        "react",
+        "graphql",
+        "kubernetes"
+      ],
+      "notes": "Legacy CRM; budget unclear",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "Tesloop Innovations",
+      "website": "https://tesloop-innovations.example",
+      "industry": "Biotech",
+      "region": "APAC",
+      "typical_project_budget_euro": "148609.00",
+      "tech_stack": [
+        "python",
+        "django",
+        "postgres"
+      ],
+      "notes": "Legacy CRM; budget unclear",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "Amazin Logistics",
+      "website": "https://amazin-logistics.example",
+      "industry": "Saas",
+      "region": "EMEA",
+      "typical_project_budget_euro": "117988.00",
+      "tech_stack": [
+        "gcp",
+        "bigquery",
+        "tensorflow"
+      ],
+      "notes": "Legacy CRM; budget unclear",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "AirBend",
+      "website": "https://airbend.example",
+      "industry": "Media",
+      "region": "APAC",
+      "typical_project_budget_euro": "128475.00",
+      "tech_stack": [
+        "aws",
+        "redshift",
+        "salesforce"
+      ],
+      "notes": "Scaling rapidly",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "SalesFroce",
+      "website": "https://salesfroce.example",
+      "industry": "Retail",
+      "region": "APAC",
+      "typical_project_budget_euro": "54882.00",
+      "tech_stack": [
+        "gcp",
+        "bigquery",
+        "tensorflow"
+      ],
+      "notes": "Scaling rapidly",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "NetFlicks AI",
+      "website": "https://netflicks-ai.example",
+      "industry": "Fintech",
+      "region": "APAC",
+      "typical_project_budget_euro": "143950.00",
+      "tech_stack": [
+        "azure",
+        "sql server",
+        "powerbi"
+      ],
+      "notes": "Scaling rapidly",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "Oracull Cloud",
+      "website": "https://oracull-cloud.example",
+      "industry": "Healthtech",
+      "region": "LATAM",
+      "typical_project_budget_euro": "123282.00",
+      "tech_stack": [
+        "azure",
+        "sql server",
+        "powerbi"
+      ],
+      "notes": "Legacy CRM; budget unclear",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "LinkedON",
+      "website": "https://linkedon.example",
+      "industry": "Saas",
+      "region": "APAC",
+      "typical_project_budget_euro": "96049.00",
+      "tech_stack": [
+        "react",
+        "graphql",
+        "kubernetes"
+      ],
+      "notes": "Legacy CRM; budget unclear",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "Adobex",
+      "website": "https://adobex.example",
+      "industry": "Healthtech",
+      "region": "EMEA",
+      "typical_project_budget_euro": "104324.00",
+      "tech_stack": [
+        "gcp",
+        "bigquery",
+        "tensorflow"
+      ],
+      "notes": "Scaling rapidly",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "TwittrrX",
+      "website": "https://twittrrx.example",
+      "industry": "Biotech",
+      "region": "North America",
+      "typical_project_budget_euro": "49718.00",
+      "tech_stack": [
+        "aws",
+        "redshift",
+        "salesforce"
+      ],
+      "notes": "AI adoption phase",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "Uberio",
+      "website": "https://uberio.example",
+      "industry": "Retail",
+      "region": "EMEA",
+      "typical_project_budget_euro": "135787.00",
+      "tech_stack": [
+        "react",
+        "graphql",
+        "kubernetes"
+      ],
+      "notes": "Legacy CRM; budget unclear",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "DropCubed",
+      "website": "https://dropcubed.example",
+      "industry": "Media",
+      "region": "DACH",
+      "typical_project_budget_euro": "130453.00",
+      "tech_stack": [
+        "aws",
+        "redshift",
+        "salesforce"
+      ],
+      "notes": "AI adoption phase",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "Shopafy",
+      "website": "https://shopafy.example",
+      "industry": "Adtech",
+      "region": "LATAM",
+      "typical_project_budget_euro": "120372.00",
+      "tech_stack": [
+        "react",
+        "graphql",
+        "kubernetes"
+      ],
+      "notes": "Legacy CRM; budget unclear",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "Intelgent Chips",
+      "website": "https://intelgent-chips.example",
+      "industry": "Adtech",
+      "region": "North America",
+      "typical_project_budget_euro": "87746.00",
+      "tech_stack": [
+        "azure",
+        "sql server",
+        "powerbi"
+      ],
+      "notes": "Scaling rapidly",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "Spotifyfy",
+      "website": "https://spotifyfy.example",
+      "industry": "Media",
+      "region": "EMEA",
+      "typical_project_budget_euro": "138338.00",
+      "tech_stack": [
+        "gcp",
+        "bigquery",
+        "tensorflow"
+      ],
+      "notes": "ICP: mid-market teams",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "companies.company",
+    "fields": {
+      "name": "Snowfluke",
+      "website": "https://snowfluke.example",
+      "industry": "Fintech",
+      "region": "LATAM",
+      "typical_project_budget_euro": "69791.00",
+      "tech_stack": [
+        "gcp",
+        "bigquery",
+        "tensorflow"
+      ],
+      "notes": "Scaling rapidly",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  }
+]
