@@ -15,6 +15,7 @@ from .schemas import (
     TrainResponse,
 )
 from .storage import store
+from .train import _encode_pair  # reuse vectorization
 from .train import train_model
 
 app = FastAPI(title="Scoring Agent", version="0.1.0")
@@ -57,15 +58,35 @@ def evaluate():
     return EvaluateResponse(metrics={"status": "ok"})
 
 
-@app.post("/score", response_model=ScoreResponse)
+@app.post("/score")
 def score(req: ScoreRequest):
-    # stub: deterministic dummy score so you can test integration
+
+    if not model.trained:
+        raise HTTPException(status_code=400, detail="Model not trained")
+
+    leads = req.leads
+    companies = store.companies()
+    if not leads or not companies:
+        raise HTTPException(status_code=400, detail="Need both leads and companies")
+
     results = []
-    for lead in req.leads:
-        base = lead.budget_normalized_euro or 0.0
-        score = max(0.0, min(1.0, (base % 100_000) / 100_000))
-        results.append(ScoredLead(id=lead.id, score=round(score, 4)))
-    return ScoreResponse(results=results)
+    for lead in leads:
+        lead_scores = []
+        for company in companies:
+            X = [_encode_pair(lead, company)]
+            prob = float(model.predict(X)[0])
+            lead_scores.append(
+                {
+                    "company_id": company.id,
+                    "company_name": company.name,
+                    "score": round(prob, 3),
+                }
+            )
+        # sort descending so best matches first
+        lead_scores.sort(key=lambda x: x["score"], reverse=True)
+        results.append({"lead_id": lead.id, "scores": lead_scores})
+
+    return {"results": results}
 
 
 @app.post("/forward-scored-leads")
