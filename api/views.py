@@ -1,11 +1,18 @@
+from django.utils import timezone
 from rest_framework import status, viewsets
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from companies.models import Company
 from leads.models import Lead, LeadCompanyMatch
 
-from .serializers import CompanySerializer, LeadCompanyMatchSerializer, LeadSerializer
+from .serializers import (
+    CompanySerializer,
+    LeadCompanyMatchIn,
+    LeadCompanyMatchSerializer,
+    LeadSerializer,
+)
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
@@ -40,3 +47,39 @@ class LeadsToCleanView(APIView):
 
         serializer = LeadSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+def ingest_matches(request):
+    """
+    Accepts a list of match rows and writes them to LeadCompanyMatch.
+    Expected body: {"matches":[{"lead_id":..,"company_id":..,"compatibility_score":..}, ...]}
+    """
+    items = request.data.get("matches", [])
+    if not items:
+        return Response({"created": 0, "detail": "No matches provided"}, status=400)
+
+    created = []
+    for row in items:
+        s = LeadCompanyMatchIn(data=row)
+        if not s.is_valid():
+            continue
+        d = s.validated_data
+        try:
+            lead = Lead.objects.get(pk=d["lead_id"])
+            company = Company.objects.get(pk=d["company_id"])
+        except (Lead.DoesNotExist, Company.DoesNotExist):
+            continue
+        created.append(
+            LeadCompanyMatch(
+                lead=lead,
+                company=company,
+                compatibility_score=d["compatibility_score"],
+                matched_at=timezone.now(),
+            )
+        )
+
+    if created:
+        LeadCompanyMatch.objects.bulk_create(created, ignore_conflicts=True)
+
+    return Response({"created": len(created)})

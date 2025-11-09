@@ -1,6 +1,8 @@
+import os
 from typing import List
 
-from fastapi import FastAPI, HTTPException
+import httpx
+from fastapi import Body, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from .model import model
@@ -17,6 +19,9 @@ from .schemas import (
 from .storage import store
 from .train import _encode_pair  # reuse vectorization
 from .train import train_model
+
+MATCHES_POST_URL = os.getenv("MATCHES_POST_URL")
+MATCHES_API_KEY = os.getenv("MATCHES_API_KEY")
 
 app = FastAPI(title="Scoring Agent", version="0.1.0")
 
@@ -89,15 +94,56 @@ def score(req: ScoreRequest):
     return {"results": results}
 
 
-@app.post("/forward-scored-leads")
-def forward_scored_leads():
-    # stub to be wired to Agent 3 later
-    return {"forwarded": 0, "status": "stub"}
-
-
 @app.post("/ingest-companies")
 def ingest_companies(payload: List[CompanyIn]):
     if not payload:
         raise HTTPException(status_code=400, detail="No companies provided")
     added = store.add_many_companies(payload)
     return {"ingested": added}
+
+
+def _flatten_results(results):
+    rows = []
+    for item in results:
+        lead_id = item.get("lead_id")
+        for sc in item.get("scores", []):
+            rows.append(
+                {
+                    "lead_id": lead_id,
+                    "company_id": sc.get("company_id"),
+                    "compatibility_score": sc.get("score"),
+                }
+            )
+    return rows
+
+
+@app.post("/forward-scored-leads")
+def forward_scored_leads(payload: dict = Body(...)):
+    """
+    Forward scoring results to Django to persist LeadCompanyMatch.
+    Expected payload shape is the output of /score:
+      {"results":[{"lead_id":..., "scores":[{"company_id":...,"score":...}, ...]}, ...]}
+    """
+    if not MATCHES_POST_URL:
+        raise HTTPException(status_code=500, detail="MATCHES_POST_URL not configured")
+
+    rows = _flatten_results(payload.get("results", []))
+    if not rows:
+        raise HTTPException(status_code=400, detail="No rows to forward")
+
+    headers = {"Content-Type": "application/json"}
+    if MATCHES_API_KEY:
+        headers["X-API-Key"] = MATCHES_API_KEY
+
+    r = httpx.post(
+        MATCHES_POST_URL, json={"matches": rows}, headers=headers, timeout=15.0
+    )
+    return {
+        "forwarded": len(rows),
+        "django_status": r.status_code,
+        "django_body": (
+            r.json()
+            if r.headers.get("content-type", "").startswith("application/json")
+            else r.text
+        ),
+    }

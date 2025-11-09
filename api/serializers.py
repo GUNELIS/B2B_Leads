@@ -23,3 +23,9 @@ class LeadCompanyMatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = LeadCompanyMatch
         fields = "__all__"
+
+
+class LeadCompanyMatchIn(serializers.Serializer):
+    lead_id = serializers.IntegerField()
+    company_id = serializers.IntegerField()
+    compatibility_score = serializers.FloatField(min_value=0.0, max_value=1.0)
