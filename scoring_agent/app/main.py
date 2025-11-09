@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -36,7 +38,7 @@ def health():
 def ingest_cleaned_leads(payload: LeadBatchIn):
     if not payload.leads:
         raise HTTPException(status_code=400, detail="No leads provided")
-    added = store.add_many(payload.leads)
+    added = store.add_many_leads(payload.leads)
     return {"ingested": added, "total": store.count()}
 
 
@@ -46,6 +48,7 @@ def train():
     if not result["trained"]:
         raise HTTPException(status_code=400, detail="No data to train on")
     return TrainResponse(trained=True, n_samples=result["n_samples"])
+
 
 @app.get("/evaluate", response_model=EvaluateResponse)
 def evaluate():
@@ -69,6 +72,7 @@ def score(req: ScoreRequest):
 def forward_scored_leads():
     # stub to be wired to Agent 3 later
     return {"forwarded": 0, "status": "stub"}
+
 
 @app.post("/ingest-companies")
 def ingest_companies(payload: List[CompanyIn]):

@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 class LeadIn(BaseModel):
     """Schema for incoming lead data."""
+
     id: Optional[int] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None

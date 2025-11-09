@@ -28,6 +28,9 @@ class InMemoryStore:
         with self._lock:
             return list(self._companies)
 
-    def counts(self):
+    def count(self):
         with self._lock:
             return len(self._leads), len(self._companies)
+
+
+store = InMemoryStore()
