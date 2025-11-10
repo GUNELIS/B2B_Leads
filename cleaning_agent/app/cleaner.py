@@ -1,7 +1,8 @@
 import re
 from datetime import datetime
-from dateutil import parser
+
 import phonenumbers
+from dateutil import parser
 from rapidfuzz import process
 
 CANONICAL_REGIONS = {
@@ -12,9 +13,18 @@ CANONICAL_REGIONS = {
 }
 
 CANONICAL_INDUSTRIES = [
-    "saas", "fintech", "ecommerce", "healthcare",
-    "manufacturing", "telecom", "energy", "education", "government", "other"
+    "saas",
+    "fintech",
+    "ecommerce",
+    "healthcare",
+    "manufacturing",
+    "telecom",
+    "energy",
+    "education",
+    "government",
+    "other",
 ]
+
 
 def normalize_budget(budget_str: str):
     """Extract numeric amount and convert to euros (rough)."""
@@ -46,6 +56,7 @@ def normalize_budget(budget_str: str):
         rate = 1
     return round(amount * rate, 2)
 
+
 def normalize_date(date_str: str):
     """Parse date string to ISO format."""
     if not date_str:
@@ -55,6 +66,7 @@ def normalize_date(date_str: str):
         return dt.isoformat()
     except Exception:
         return None
+
 
 def normalize_phone(phone_str: str, default_region="NL"):
     """Normalize phone number to E.164 format."""
@@ -68,6 +80,7 @@ def normalize_phone(phone_str: str, default_region="NL"):
         pass
     return None
 
+
 def canonical_region(region_raw: str):
     """Map raw region to canonical region."""
     if not region_raw:
@@ -78,6 +91,7 @@ def canonical_region(region_raw: str):
             return canon
     return "other"
 
+
 def canonical_industry(industry_raw: str):
     """Map raw industry to canonical using fuzzy matching."""
     if not industry_raw:
@@ -85,11 +99,14 @@ def canonical_industry(industry_raw: str):
     match, score, _ = process.extractOne(industry_raw.lower(), CANONICAL_INDUSTRIES)
     return match if score > 80 else "other"
 
+
 def clean_lead(lead: dict):
     """Return normalized fields merged onto the raw lead."""
     cleaned = lead.copy()
     cleaned["email"] = lead["email"].strip().lower()
-    cleaned["rough_budget_normalized_euro"] = normalize_budget(lead.get("rough_budget_raw"))
+    cleaned["rough_budget_normalized_euro"] = normalize_budget(
+        lead.get("rough_budget_raw")
+    )
     cleaned["first_contacted_at"] = normalize_date(lead.get("first_contacted_raw"))
     cleaned["phone"] = normalize_phone(lead.get("phone"))
     cleaned["region"] = canonical_region(lead.get("region"))
