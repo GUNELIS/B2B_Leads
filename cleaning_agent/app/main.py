@@ -11,6 +11,7 @@ app = FastAPI(title="Cleaning Agent", version="0.1.0")
 async def health():
     return {"status": "ok"}
 
+
 @app.api_route("/clean-leads", methods=["GET", "POST"])
 async def clean_leads(limit: int = 100):
     """Fetch raw leads, clean them, and post the cleaned leads."""

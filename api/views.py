@@ -16,7 +16,6 @@ from .serializers import (
 )
 
 
-
 class CompanyViewSet(viewsets.ModelViewSet):
     """API endpoint to view companies."""
 
@@ -86,7 +85,7 @@ def ingest_matches(request):
 
     return Response({"created": len(created)})
 
+
 class LeadCompanyMatchReportView(generics.ListAPIView):
     queryset = LeadCompanyMatch.objects.select_related("lead", "company").all()
     serializer_class = LeadCompanyMatchReportSerializer
-

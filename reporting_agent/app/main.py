@@ -41,14 +41,14 @@ def health() -> dict:
 def generate_report() -> ReportResponse:
     """Generate a placeholder report.
 
-        This stub will be replaced to:
-        1) fetch top matches from Django,
-        2) compute trends,
-        3) summarize via a tiny LLM.
+    This stub will be replaced to:
+    1) fetch top matches from Django,
+    2) compute trends,
+    3) summarize via a tiny LLM.
 
-        Returns:
-            ReportResponse with a placeholder summary and empty stats.
-    """    
+    Returns:
+        ReportResponse with a placeholder summary and empty stats.
+    """
     try:
         limit = int(os.getenv("REPORT_TOP_N", "50"))
         matches = get_top_matches(limit=limit)

@@ -30,6 +30,7 @@ class LeadCompanyMatchIn(serializers.Serializer):
     company_id = serializers.IntegerField()
     compatibility_score = serializers.FloatField(min_value=0.0, max_value=1.0)
 
+
 class LeadCompanyMatchReportSerializer(serializers.ModelSerializer):
     """Serializer exposing both lead and company context for reporting."""
 
@@ -37,12 +38,8 @@ class LeadCompanyMatchReportSerializer(serializers.ModelSerializer):
     company_name = serializers.CharField(source="company.name", read_only=True)
 
     # From lead
-    lead_industry = serializers.CharField(
-        source="lead.industry_raw", read_only=True
-    )
-    lead_region = serializers.CharField(
-        source="lead.region", read_only=True
-    )
+    lead_industry = serializers.CharField(source="lead.industry_raw", read_only=True)
+    lead_region = serializers.CharField(source="lead.region", read_only=True)
     lead_budget_normalized_euro = serializers.DecimalField(
         source="lead.rough_budget_normalized_euro",
         read_only=True,
@@ -52,12 +49,8 @@ class LeadCompanyMatchReportSerializer(serializers.ModelSerializer):
     )
 
     # From company
-    company_industry = serializers.CharField(
-        source="company.industry", read_only=True
-    )
-    company_region = serializers.CharField(
-        source="company.region", read_only=True
-    )
+    company_industry = serializers.CharField(source="company.industry", read_only=True)
+    company_region = serializers.CharField(source="company.region", read_only=True)
     company_budget_normalized_euro = serializers.DecimalField(
         source="company.typical_project_budget_euro",
         read_only=True,

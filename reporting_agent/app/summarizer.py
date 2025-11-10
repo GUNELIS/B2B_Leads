@@ -1,9 +1,17 @@
 """Hybrid summarizer with instruction-tuned model, anti-repetition, and cleanup."""
+
 import os
-from typing import Dict, Optional, List
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline, AutoModelForCausalLM
+from typing import Dict, List, Optional
+
+from transformers import (
+    AutoModelForCausalLM,
+    AutoModelForSeq2SeqLM,
+    AutoTokenizer,
+    pipeline,
+)
 
 _cache = {"pipe": None, "mode": None}  # mode: "seq2seq" | "causal"
+
 
 def _load_pipe():
     if _cache["pipe"] is not None:
@@ -14,7 +22,9 @@ def _load_pipe():
     try:
         tok = AutoTokenizer.from_pretrained(model_name)
         mdl = AutoModelForSeq2SeqLM.from_pretrained(model_name)
-        _cache["pipe"] = pipeline("text2text-generation", model=mdl, tokenizer=tok, device=-1)
+        _cache["pipe"] = pipeline(
+            "text2text-generation", model=mdl, tokenizer=tok, device=-1
+        )
         _cache["mode"] = "seq2seq"
         return _cache["pipe"], _cache["mode"]
     except Exception:
@@ -22,9 +32,12 @@ def _load_pipe():
         model_name = os.getenv("LLM_MODEL_NAME", "sshleifer/tiny-gpt2")
         tok = AutoTokenizer.from_pretrained(model_name)
         mdl = AutoModelForCausalLM.from_pretrained(model_name)
-        _cache["pipe"] = pipeline("text-generation", model=mdl, tokenizer=tok, device=-1)
+        _cache["pipe"] = pipeline(
+            "text-generation", model=mdl, tokenizer=tok, device=-1
+        )
         _cache["mode"] = "causal"
         return _cache["pipe"], _cache["mode"]
+
 
 def _join_top(items: Optional[List[dict]], key: str, k: int = 3) -> str:
     if not items:
@@ -32,9 +45,11 @@ def _join_top(items: Optional[List[dict]], key: str, k: int = 3) -> str:
     names = [d.get(key) for d in items if d.get(key)]
     return ", ".join(names[:k]) if names else "N/A"
 
+
 def _clean_sentences(text: str, max_sents: int = 6) -> str:
     # Normalize whitespace and split crudely on sentence endings.
     import re
+
     text = re.sub(r"\s+", " ", text).strip()
     parts = re.split(r"(?<=[.!?])\s+", text)
     # Deduplicate consecutive repeats.
@@ -49,6 +64,7 @@ def _clean_sentences(text: str, max_sents: int = 6) -> str:
         cleaned.append(p)
     # Cap length.
     return " ".join(cleaned[:max_sents]).strip()
+
 
 def summarize(stats: Dict) -> str:
     if not stats or stats.get("count", 0) == 0:
@@ -92,9 +108,7 @@ def summarize(stats: Dict) -> str:
             )[0]["generated_text"]
         else:
             # Causal fallback: prepend context, then ask for continuation.
-            prompt = (
-                base + " Provide 3 additional concise business insight sentences."
-            )
+            prompt = base + " Provide 3 additional concise business insight sentences."
             out = pipe(
                 prompt,
                 max_new_tokens=120,
@@ -104,11 +118,13 @@ def summarize(stats: Dict) -> str:
                 no_repeat_ngram_size=4,
                 repetition_penalty=1.2,
                 eos_token_id=pipe.tokenizer.eos_token_id,
-                pad_token_id=getattr(pipe.tokenizer, "pad_token_id", pipe.tokenizer.eos_token_id),
+                pad_token_id=getattr(
+                    pipe.tokenizer, "pad_token_id", pipe.tokenizer.eos_token_id
+                ),
             )[0]["generated_text"]
             # Remove the prompt prefix if present.
             if out.startswith(prompt):
-                out = out[len(prompt):].strip()
+                out = out[len(prompt) :].strip()
 
         enriched = _clean_sentences(out)
         # If model yielded nothing useful, return baseline.

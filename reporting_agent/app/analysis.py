@@ -1,6 +1,7 @@
 """Basic analytics over LeadCompanyMatch data."""
 
-from typing import Dict, Any, List
+from typing import Any, Dict, List
+
 import pandas as pd
 
 
