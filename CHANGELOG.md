@@ -19,7 +19,7 @@ _The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 - Compose integration exposing port 8100 with environment-configurable Django base URL and endpoint paths.
 
 ### Changed
-_No changes._
+- Added concise docstrings across Reporting Agent modules (main.py, client.py, analysis.py, summarizer.py) to clarify responsibilities, inputs, and outputs.
 
 ### Deprecated
 _No changes._
