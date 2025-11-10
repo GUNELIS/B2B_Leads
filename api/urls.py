@@ -6,6 +6,7 @@ from .views import (
     LeadCompanyMatchViewSet,
     LeadsToCleanView,
     LeadViewSet,
+    ingest_matches,
 )
 
 router = DefaultRouter()
@@ -15,5 +16,6 @@ router.register(r"matches", LeadCompanyMatchViewSet)
 
 urlpatterns = [
     path("leads/to-clean/", LeadsToCleanView.as_view(), name="leads-to-clean"),
+    path("matches/ingest/", ingest_matches, name="matches-ingest"),
     path("", include(router.urls)),
 ]
