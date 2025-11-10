@@ -1,5 +1,5 @@
 from django.utils import timezone
-from rest_framework import status, viewsets
+from rest_framework import generics, status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -10,9 +10,11 @@ from leads.models import Lead, LeadCompanyMatch
 from .serializers import (
     CompanySerializer,
     LeadCompanyMatchIn,
+    LeadCompanyMatchReportSerializer,
     LeadCompanyMatchSerializer,
     LeadSerializer,
 )
+
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
@@ -83,3 +85,8 @@ def ingest_matches(request):
         LeadCompanyMatch.objects.bulk_create(created, ignore_conflicts=True)
 
     return Response({"created": len(created)})
+
+class LeadCompanyMatchReportView(generics.ListAPIView):
+    queryset = LeadCompanyMatch.objects.select_related("lead", "company").all()
+    serializer_class = LeadCompanyMatchReportSerializer
+

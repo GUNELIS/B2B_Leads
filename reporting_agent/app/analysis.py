@@ -1,32 +1,71 @@
-"""Basic analytics over LeadCompanyMatch data.
+"""Basic analytics over LeadCompanyMatch data."""
 
-Provides small, transparent computations suitable for quick reporting.
-"""
-
-from typing import Any, Dict
-
+from typing import Dict, Any, List
 import pandas as pd
 
 
+def _extract_results(matches_json: Any) -> List[dict]:
+    if isinstance(matches_json, dict) and "results" in matches_json:
+        return matches_json["results"]
+    if isinstance(matches_json, list):
+        return matches_json
+    return []
+
+
+def _first_existing(df: pd.DataFrame, candidates: list[str]) -> str | None:
+    """Return the first column name from candidates that exists in df."""
+    for c in candidates:
+        if c in df.columns:
+            return c
+    return None
+
+
 def compute_basic_stats(matches_json: Any) -> Dict[str, Any]:
-    """Compute simple trend metrics from match records.
+    """Compute numeric and categorical trends from reporting payload."""
+    data = _extract_results(matches_json)
+    if not data:
+        return {"count": 0}
 
-    Expected input is either a list of match dicts or a paginated dict
-    with a 'results' field. The function is defensive and will handle both.
+    df = pd.DataFrame(data)
+    print("DEBUG columns:", list(df.columns), flush=True)
 
-    Args:
-        matches_json: Raw JSON returned by the Django API.
+    out: Dict[str, Any] = {"count": len(df)}
 
-    Returns:
-        A dictionary of metrics, e.g.:
-            {
-              "count": 50,
-              "score": {"mean": 0.71, "p90": 0.92, "max": 0.98},
-              "top_industries": [{"industry":"saas","count":12}, ...],
-              "top_regions": [{"region":"dach","count":9}, ...],
-              "budget_bands": [{"band":"€0-5k","count":7}, ...]
-            }
-        Placeholder for now. Real logic will be added next.
-    """
-    # Placeholder implementation to keep the interface stable.
-    return {}
+    # --- numeric score ---
+    score_field = _first_existing(df, ["score", "compatibility_score"])
+    if score_field:
+        df["score"] = pd.to_numeric(df[score_field], errors="coerce")
+        out["score"] = {
+            "mean": round(df["score"].mean(), 3),
+            "median": round(df["score"].median(), 3),
+            "p90": round(df["score"].quantile(0.9), 3),
+            "max": round(df["score"].max(), 3),
+        }
+
+    # --- categorical fields (lead or company variants) ---
+    industry_field = _first_existing(df, ["company_industry", "lead_industry"])
+    region_field = _first_existing(df, ["company_region", "lead_region"])
+    budget_field = _first_existing(
+        df, ["company_budget_normalized_euro", "lead_budget_normalized_euro"]
+    )
+
+    for name, field in [
+        ("industry", industry_field),
+        ("region", region_field),
+        ("budget_normalized_euro", budget_field),
+    ]:
+        if field and field in df:
+            vc = (
+                df[field]
+                .dropna()
+                .astype(str)
+                .str.strip()
+                .value_counts()
+                .head(5)
+                .reset_index()
+            )
+            vc.columns = [name, "count"]
+            freq = vc.to_dict(orient="records")
+            out[f"top_{name}s"] = freq
+
+    return out

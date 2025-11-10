@@ -44,7 +44,7 @@ services:
       - django
     environment:
       - DJANGO_BASE_URL=http://django:8000
-      - MATCHES_ENDPOINT=/api/matches/
+      - MATCHES_ENDPOINT=/api/matches/report/
       - REPORT_TOP_N=50
       - LLM_MODEL_NAME=distilgpt2
 

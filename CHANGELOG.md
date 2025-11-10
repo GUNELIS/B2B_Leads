@@ -10,28 +10,28 @@ _The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 0.5.0 (unreleased)
 ------------------
 ### Major features
+- Implemented Agent 3 (Reporting Agent) to analyze and summarize Lead–Company match data.
 
 ### Added
-- Reporting Agent service:
-- New FastAPI microservice to fetch top LeadCompanyMatch records, analyze trends, and generate a textual report.
-- Initial scaffold: /health and /generate-report endpoints, HTTP client stub, analysis and summarizer placeholders.
-- Dockerfile and requirements for CPU-only lightweight LLMs (transformers + torch).
-- Compose integration exposing port 8100 with environment-configurable Django base URL and endpoint paths.
+- New FastAPI microservice that fetches top LeadCompanyMatch records from Django,
+  computes aggregate metrics, and generates textual summaries via a lightweight LLM.
+- Added analysis logic to calculate mean, median, p90, and category frequencies
+  (industries, regions, budget ranges).
+- Added deterministic + LLM hybrid summarizer producing concise business insights.
+- Integrated Reporting Agent container into Docker Compose on port 8100
+  with environment variables for configurable endpoints and models.
 
 ### Changed
-- Added concise docstrings across Reporting Agent modules (main.py, client.py, analysis.py, summarizer.py) to clarify responsibilities, inputs, and outputs.
-
-### Deprecated
-_No changes._
-
-### Removed
-_No changes._
+- Extended Django with `/api/matches/report/` endpoint using
+  `LeadCompanyMatchReportSerializer` to expose enriched lead/company fields.
 
 ### Fixed
-_No changes._
+- Corrected analytics and summarizer key mappings so top industries and regions
+  render accurately in generated reports.
 
 ### Security
-- Optional bearer DJANGO_API_KEY header support for inter-service calls.
+- Optional bearer token support for inter-agent API calls.
+
 
 0.4.0 (unreleased)
 ------------------
@@ -52,6 +52,8 @@ _No changes._
 - Added storage.py as a lightweight in-memory data store with thread safety.
 - Added complete REST testing coverage with Postman-compatible payloads for leads and companies.
 - Added forwarding integration: /forward-scored-leads endpoint posts model results back to Django via REST API to populate LeadCompanyMatch.
+- Score distribution visualization (Matplotlib histogram) returned as base64 string in report JSON.
+- Extended LLM summarizer to generate longer multi-sentence executive summaries with nucleus sampling.
 
 ### Changed
 - Enhanced Cleaning Agent and Django interaction assumptions to support downstream persistence.
