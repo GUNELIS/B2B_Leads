@@ -7,6 +7,32 @@ in this file.
 _The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)._
 
 
+0.5.0 (unreleased)
+------------------
+### Major features
+
+### Added
+- Reporting Agent service:
+- New FastAPI microservice to fetch top LeadCompanyMatch records, analyze trends, and generate a textual report.
+- Initial scaffold: /health and /generate-report endpoints, HTTP client stub, analysis and summarizer placeholders.
+- Dockerfile and requirements for CPU-only lightweight LLMs (transformers + torch).
+- Compose integration exposing port 8100 with environment-configurable Django base URL and endpoint paths.
+
+### Changed
+_No changes._
+
+### Deprecated
+_No changes._
+
+### Removed
+_No changes._
+
+### Fixed
+_No changes._
+
+### Security
+- Optional bearer DJANGO_API_KEY header support for inter-service calls.
+
 0.4.0 (unreleased)
 ------------------
 ### Major features

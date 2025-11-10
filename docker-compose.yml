@@ -35,3 +35,16 @@ services:
     environment:
       - MATCHES_POST_URL=http://django:8000/api/matches/ingest/
 
+  reporting_agent:
+    build: ./reporting_agent
+    container_name: reporting_agent
+    ports:
+      - "8100:8100"
+    depends_on:
+      - django
+    environment:
+      - DJANGO_BASE_URL=http://django:8000
+      - MATCHES_ENDPOINT=/api/matches/
+      - REPORT_TOP_N=50
+      - LLM_MODEL_NAME=distilgpt2
+
