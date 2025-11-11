@@ -5,46 +5,48 @@ services:
     build: .
     container_name: django_app
     command: python manage.py runserver 0.0.0.0:8000
-    ports:
-      - "8000:8000"
-    volumes:
-      - .:/app
+    ports: ["8000:8000"]
     environment:
       - DEBUG=1
+      - ALLOWED_HOSTS=*
+    restart: unless-stopped
+    # Optional on a server; remove if you prefer immutable images
+    # volumes:
+    #   - .:/app
 
   cleaning_agent:
     build: ./cleaning_agent
     container_name: cleaning_agent
-    ports:
-      - "8080:8080"
-    depends_on:
-      - django
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8080
+    ports: ["8080:8080"]
+    depends_on: [django]
+    restart: unless-stopped
 
   scoring_agent:
     build: ./scoring_agent
     container_name: scoring_agent
-    ports:
-      - "8090:8090"
-    depends_on:
-      - django
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8090
+    ports: ["8090:8090"]
+    depends_on: [django]
+    environment:
+      - MATCHES_POST_URL=http://django:8000/api/matches/ingest/
+    # Use CMD-SHELL and wget to avoid needing curl in the image
     healthcheck:
-      test: ["CMD", "curl", "-fsS", "http://localhost:8090/health"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8090/health >/dev/null 2>&1 || exit 1"]
       interval: 10s
       timeout: 3s
       retries: 10
-    environment:
-      - MATCHES_POST_URL=http://django:8000/api/matches/ingest/
+    restart: unless-stopped
 
   reporting_agent:
     build: ./reporting_agent
     container_name: reporting_agent
-    ports:
-      - "8100:8100"
-    depends_on:
-      - django
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8100
+    ports: ["8100:8100"]
+    depends_on: [django]
     environment:
       - DJANGO_BASE_URL=http://django:8000
       - MATCHES_ENDPOINT=/api/matches/report/
       - REPORT_TOP_N=50
       - LLM_MODEL_NAME=distilgpt2
-
+    restart: unless-stopped
